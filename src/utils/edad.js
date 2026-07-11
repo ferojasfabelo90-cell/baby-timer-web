@@ -1,10 +1,16 @@
 // Calcula una edad legible ("1 año 2 meses", "3 meses", "12 días")
 // a partir de una fecha de nacimiento en formato ISO (YYYY-MM-DD).
 export function calcularEdad(fechaNacimientoISO) {
-  if (!fechaNacimientoISO) return '';
+  if (!fechaNacimientoISO) return 'Edad no disponible';
 
   const nacimiento = new Date(fechaNacimientoISO + 'T00:00:00');
   const hoy = new Date();
+
+  // Si la fecha vino en un formato que no pudimos interpretar,
+  // mostramos esto en vez de "NaN años NaN meses".
+  if (isNaN(nacimiento.getTime())) {
+    return 'Edad no disponible';
+  }
 
   let años = hoy.getFullYear() - nacimiento.getFullYear();
   let meses = hoy.getMonth() - nacimiento.getMonth();
