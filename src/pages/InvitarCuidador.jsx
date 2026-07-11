@@ -32,7 +32,7 @@ export default function InvitarCuidador() {
       if (err.response?.status === 404) {
         setError('Ese email todavía no tiene una cuenta en Baby Timer. Pedile que se registre primero y volvé a intentar.');
       } else if (err.response?.status === 400) {
-        setError('Esa persona ya tiene acceso a este bebé.');
+        setError('Esa persona ya tiene acceso a este bebé, o ya le enviaste una invitación que todavía no respondió.');
       } else {
         setError(extractErrorMessage(err, 'No pudimos enviar la invitación.'));
       }
@@ -85,7 +85,7 @@ export default function InvitarCuidador() {
         {error && <div className="error-banner">{error}</div>}
         {exito && (
           <div style={{ background: 'var(--color-success-bg)', color: 'var(--color-success)', borderRadius: 'var(--radius-sm)', padding: '12px 16px', marginBottom: 'var(--space-4)', fontSize: '0.9rem' }}>
-            ¡Listo! Ya tiene acceso a {bebe.nombre}.
+            ¡Invitación enviada! {bebe.nombre} va a aparecer en su cuenta como una invitación pendiente hasta que la acepte.
           </div>
         )}
 
