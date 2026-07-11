@@ -1,0 +1,43 @@
+:root {
+  /* Color — cálido y calmo, pensado para usarse de noche sin cansar la vista */
+  --color-bg: #FAF7F2;           /* Lino: fondo general */
+  --color-surface: #FFFFFF;       /* tarjetas / paneles */
+  --color-border: #E5DFD3;        /* bordes sutiles */
+
+  --color-brand: #3A5A50;         /* Pino: color de marca, calma/confianza */
+  --color-brand-dark: #2A4640;
+  --color-brand-light: #EAF0EE;
+
+  --color-accent: #E8935F;        /* Durazno: acciones principales */
+  --color-accent-dark: #D97D45;
+
+  --color-success: #7FA37A;       /* tarea completada */
+  --color-success-bg: #EEF4EC;
+  --color-pending: #C98A4B;       /* tarea pendiente */
+  --color-pending-bg: #FBF0E4;
+  --color-danger: #C6604F;        /* acciones destructivas / errores */
+  --color-danger-bg: #FBECE9;
+
+  --color-text: #2B2621;          /* texto principal, carbón cálido */
+  --color-text-muted: #6E6459;
+
+  /* Tipografía */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Bordes / sombras */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(43, 38, 33, 0.06);
+  --shadow-md: 0 4px 16px rgba(43, 38, 33, 0.08);
+}
