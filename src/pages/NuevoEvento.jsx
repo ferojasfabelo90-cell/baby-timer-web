@@ -18,6 +18,10 @@ export default function NuevoEvento() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (!descripcion.trim()) {
+      setError(t('validacion.campoRequerido'));
+      return;
+    }
     setEnviando(true);
     try {
       await crearEvento({ bebeId: Number(bebeId), tipoEvento, descripcion: descripcion.trim() });
@@ -36,7 +40,7 @@ export default function NuevoEvento() {
       </Link>
       <h2>{t('nuevoEvento.titulo')}</h2>
 
-      <form className="card" onSubmit={handleSubmit}>
+      <form className="card" onSubmit={handleSubmit} noValidate>
         {error && <div className="error-banner">{error}</div>}
 
         <div className="field">

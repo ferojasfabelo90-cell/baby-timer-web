@@ -25,6 +25,10 @@ export default function InvitarCuidador() {
     e.preventDefault();
     setError('');
     setExito(false);
+    if (!email.trim()) {
+      setError(t('validacion.campoRequerido'));
+      return;
+    }
     setEnviando(true);
     try {
       await invitarCuidador(Number(bebeId), email.trim());
@@ -78,7 +82,7 @@ export default function InvitarCuidador() {
       <h2>{t('invitar.titulo')}</h2>
       <p>{t('invitar.explicacion', { nombre: bebe.nombre })}</p>
 
-      <form className="card" onSubmit={handleSubmit}>
+      <form className="card" onSubmit={handleSubmit} noValidate>
         {error && <div className="error-banner">{error}</div>}
         {exito && (
           <div style={{ background: 'var(--color-success-bg)', color: 'var(--color-success)', borderRadius: 'var(--radius-sm)', padding: '12px 16px', marginBottom: 'var(--space-4)', fontSize: '0.9rem' }}>

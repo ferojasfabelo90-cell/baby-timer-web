@@ -12,9 +12,15 @@ export default function TareaForm({ valoresIniciales, onSubmit, textoBoton, erro
     valoresIniciales?.horaProgramada ? valoresIniciales.horaProgramada.slice(0, 5) : ''
   );
   const [enviando, setEnviando] = useState(false);
+  const [errorValidacion, setErrorValidacion] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setErrorValidacion('');
+    if (!horaProgramada) {
+      setErrorValidacion(t('validacion.campoRequerido'));
+      return;
+    }
     setEnviando(true);
     try {
       await onSubmit({
@@ -29,8 +35,8 @@ export default function TareaForm({ valoresIniciales, onSubmit, textoBoton, erro
   }
 
   return (
-    <form className="card" onSubmit={handleSubmit}>
-      {error && <div className="error-banner">{error}</div>}
+    <form className="card" onSubmit={handleSubmit} noValidate>
+      {(errorValidacion || error) && <div className="error-banner">{errorValidacion || error}</div>}
 
       <div className="field">
         <label htmlFor="tipoTarea">{t('tarea.tipo')}</label>

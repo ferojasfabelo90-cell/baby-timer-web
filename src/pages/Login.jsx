@@ -17,6 +17,10 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (!email.trim() || !password) {
+      setError(t('validacion.campoRequerido'));
+      return;
+    }
     setEnviando(true);
     try {
       await login({ email, password });
@@ -41,7 +45,7 @@ export default function Login() {
 
         {error && <div className="error-banner">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="field">
             <label htmlFor="email">{t('login.email')}</label>
             <input

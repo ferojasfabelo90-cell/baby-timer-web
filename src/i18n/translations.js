@@ -149,6 +149,11 @@ export const translations = {
     'error.texto': 'Ocurrió un error inesperado. Podés intentar recargar la página; si el problema sigue, contanos qué estabas haciendo cuando pasó.',
     'error.recargar': 'Recargar',
 
+    // Validación de formularios (reemplaza el aviso nativo del navegador,
+    // que sale en el idioma del navegador/SO y no en el de la app).
+    'validacion.campoRequerido': 'Completá este campo.',
+    'validacion.passwordCorta': 'La contraseña tiene que tener al menos 6 caracteres.',
+
     // Edad
     'edad.noDisponible': 'Edad no disponible',
     'edad.recienNacido': 'Recién nacido',
@@ -323,6 +328,11 @@ export const translations = {
     'error.titulo': 'Something went wrong',
     'error.texto': 'An unexpected error occurred. You can try reloading the page; if the problem continues, let us know what you were doing when it happened.',
     'error.recargar': 'Reload',
+
+    // Form validation (replaces the browser's native prompt, which shows
+    // in the browser/OS language instead of the app's language).
+    'validacion.campoRequerido': 'Please fill in this field.',
+    'validacion.passwordCorta': 'Password must be at least 6 characters long.',
 
     // Age
     'edad.noDisponible': 'Age not available',

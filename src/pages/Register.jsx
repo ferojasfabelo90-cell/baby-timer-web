@@ -18,6 +18,14 @@ export default function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (!nombre.trim() || !email.trim() || !password) {
+      setError(t('validacion.campoRequerido'));
+      return;
+    }
+    if (password.length < 6) {
+      setError(t('validacion.passwordCorta'));
+      return;
+    }
     setEnviando(true);
     try {
       await register({ nombre, email, password });
@@ -38,7 +46,7 @@ export default function Register() {
 
         {error && <div className="error-banner">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="field">
             <label htmlFor="nombre">{t('register.nombre')}</label>
             <input

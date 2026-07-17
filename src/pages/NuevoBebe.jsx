@@ -15,6 +15,10 @@ export default function NuevoBebe() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (!nombre.trim() || !fechaNacimiento) {
+      setError(t('validacion.campoRequerido'));
+      return;
+    }
     setGuardando(true);
     try {
       const bebe = await crearBebe({ nombre, fechaNacimiento });
@@ -32,7 +36,7 @@ export default function NuevoBebe() {
 
       {error && <div className="error-banner">{error}</div>}
 
-      <form className="card" onSubmit={handleSubmit}>
+      <form className="card" onSubmit={handleSubmit} noValidate>
         <div className="field">
           <label htmlFor="nombre">{t('nuevoBebe.nombre')}</label>
           <input
