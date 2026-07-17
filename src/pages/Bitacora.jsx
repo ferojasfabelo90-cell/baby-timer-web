@@ -4,9 +4,11 @@ import { obtenerBebe } from '../api/bebes';
 import { listarEventos } from '../api/eventos';
 import { infoTipoEvento, formatearFechaHora } from '../utils/eventos';
 import { extractErrorMessage } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Bitacora() {
   const { bebeId } = useParams();
+  const { t } = useLanguage();
 
   const [bebe, setBebe] = useState(null);
   const [eventos, setEventos] = useState(null);
@@ -19,7 +21,8 @@ export default function Bitacora() {
         setBebe(bebeData);
         setEventos(eventosData);
       })
-      .catch((err) => setError(extractErrorMessage(err, 'No pudimos cargar la bitácora.')));
+      .catch((err) => setError(extractErrorMessage(err, t('bitacora.errorCarga'))));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bebeId]);
 
   if (error && !bebe) {
@@ -27,32 +30,32 @@ export default function Bitacora() {
       <div className="page">
         <div className="error-banner">{error}</div>
         <Link to={`/bebes/${bebeId}`} className="muted-link" style={{ display: 'block' }}>
-          Volver al dashboard
+          {t('bitacora.volverDashboardLink')}
         </Link>
       </div>
     );
   }
 
   if (!bebe || eventos === null) {
-    return <div className="page">Cargando…</div>;
+    return <div className="page">{t('bitacora.cargando')}</div>;
   }
 
   return (
     <div className="page">
       <Link to={`/bebes/${bebeId}`} className="muted-link" style={{ display: 'block', marginBottom: 'var(--space-4)' }}>
-        ← Dashboard de {bebe.nombre}
+        {t('bitacora.volverDashboard', { nombre: bebe.nombre })}
       </Link>
 
-      <h2>Bitácora de {bebe.nombre}</h2>
+      <h2>{t('bitacora.tituloDe', { nombre: bebe.nombre })}</h2>
 
       {error && <div className="error-banner">{error}</div>}
 
       {eventos.length === 0 ? (
-        <p>Todavía no hay eventos registrados.</p>
+        <p>{t('bitacora.sinEventos')}</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
           {eventos.map((evento) => {
-            const { label, icono } = infoTipoEvento(evento.tipoEvento);
+            const { label, icono } = infoTipoEvento(evento.tipoEvento, t);
             return (
               <div key={evento.id} className="card evento-card">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
@@ -70,7 +73,7 @@ export default function Bitacora() {
       )}
 
       <Link to={`/bebes/${bebeId}/bitacora/nuevo`} className="btn btn-primary" style={{ display: 'inline-flex' }}>
-        + Registrar evento
+        {t('bitacora.registrarEvento')}
       </Link>
     </div>
   );

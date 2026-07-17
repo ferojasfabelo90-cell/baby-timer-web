@@ -1,20 +1,26 @@
-export const TIPO_EVENTO_INFO = {
-  TAREA_REALIZADA: { label: 'Tarea realizada', icono: '✅' },
-  CAMBIO: { label: 'Cambio', icono: '🔄' },
-  IMPREVISTO: { label: 'Imprevisto', icono: '⚠️' },
-  OBSERVACION: { label: 'Observación', icono: '📝' },
+const ICONOS_TIPO_EVENTO = {
+  TAREA_REALIZADA: '✅',
+  CAMBIO: '🔄',
+  IMPREVISTO: '⚠️',
+  OBSERVACION: '📝',
 };
+
+export function infoTipoEvento(tipo, t) {
+  return {
+    label: t(`tipoEvento.${tipo}`),
+    icono: ICONOS_TIPO_EVENTO[tipo] || '📌',
+  };
+}
 
 // TAREA_REALIZADA la genera el sistema automáticamente al marcar una tarea
 // como hecha — no se ofrece como opción al registrar un evento manual.
-export const TIPO_EVENTO_MANUAL_OPTIONS = [
-  { value: 'CAMBIO', label: '🔄 Cambio' },
-  { value: 'IMPREVISTO', label: '⚠️ Imprevisto' },
-  { value: 'OBSERVACION', label: '📝 Observación' },
-];
+const TIPOS_EVENTO_MANUAL = ['CAMBIO', 'IMPREVISTO', 'OBSERVACION'];
 
-export function infoTipoEvento(tipo) {
-  return TIPO_EVENTO_INFO[tipo] || { label: tipo, icono: '📌' };
+export function tipoEventoManualOptions(t) {
+  return TIPOS_EVENTO_MANUAL.map((value) => ({
+    value,
+    label: `${ICONOS_TIPO_EVENTO[value]} ${t(`tipoEvento.${value}`)}`,
+  }));
 }
 
 // "2026-07-08T14:30:00" -> "08/07 14:30"

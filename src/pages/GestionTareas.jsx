@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { obtenerBebe } from '../api/bebes';
 import { listarTareas, desactivarTarea } from '../api/tareas';
-import { infoTipoTarea, formatearHora, FRECUENCIA_INFO } from '../utils/tareas';
+import { infoTipoTarea, formatearHora, frecuenciaLabel } from '../utils/tareas';
 import { extractErrorMessage } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function GestionTareas() {
   const { bebeId } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [bebe, setBebe] = useState(null);
   const [tareas, setTareas] = useState(null);
@@ -21,20 +23,21 @@ export default function GestionTareas() {
         setBebe(bebeData);
         setTareas(tareasData);
       })
-      .catch((err) => setError(extractErrorMessage(err, 'No pudimos cargar las tareas.')));
+      .catch((err) => setError(extractErrorMessage(err, t('gestionTareas.errorCarga'))));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bebeId]);
 
   async function handleDesactivar(tareaId) {
-    if (!window.confirm('¿Desactivar esta tarea? Ya no va a aparecer en las actividades del día.')) {
+    if (!window.confirm(t('gestionTareas.confirmarDesactivar'))) {
       return;
     }
     setDesactivandoId(tareaId);
     setError('');
     try {
       await desactivarTarea(tareaId);
-      setTareas((actuales) => actuales.filter((t) => t.id !== tareaId));
+      setTareas((actuales) => actuales.filter((t2) => t2.id !== tareaId));
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos desactivar la tarea.'));
+      setError(extractErrorMessage(err, t('gestionTareas.errorDesactivar')));
     } finally {
       setDesactivandoId(null);
     }
@@ -45,24 +48,22 @@ export default function GestionTareas() {
       <div className="page">
         <div className="error-banner">{error}</div>
         <Link to={`/bebes/${bebeId}`} className="muted-link" style={{ display: 'block' }}>
-          Volver al dashboard
+          {t('gestionTareas.volverDashboardLink')}
         </Link>
       </div>
     );
   }
 
   if (!bebe || tareas === null) {
-    return <div className="page">Cargando…</div>;
+    return <div className="page">{t('gestionTareas.cargando')}</div>;
   }
 
-  // Defensa en el cliente: la API igual rechaza esto con 403,
-  // pero evitamos que un CUIDADOR llegue a ver esta pantalla por error.
   if (bebe.rol !== 'ADMIN') {
     return (
       <div className="page">
-        <div className="error-banner">Solo el administrador de {bebe.nombre} puede gestionar tareas.</div>
+        <div className="error-banner">{t('gestionTareas.soloAdmin', { nombre: bebe.nombre })}</div>
         <Link to={`/bebes/${bebeId}`} className="muted-link" style={{ display: 'block' }}>
-          Volver al dashboard
+          {t('gestionTareas.volverDashboardLink')}
         </Link>
       </div>
     );
@@ -71,19 +72,19 @@ export default function GestionTareas() {
   return (
     <div className="page">
       <Link to={`/bebes/${bebeId}`} className="muted-link" style={{ display: 'block', marginBottom: 'var(--space-4)' }}>
-        ← Dashboard de {bebe.nombre}
+        {t('gestionTareas.volverDashboard', { nombre: bebe.nombre })}
       </Link>
 
-      <h2>Tareas de {bebe.nombre}</h2>
+      <h2>{t('gestionTareas.tareasDe', { nombre: bebe.nombre })}</h2>
 
       {error && <div className="error-banner">{error}</div>}
 
       {tareas.length === 0 ? (
-        <p>Todavía no hay tareas creadas.</p>
+        <p>{t('gestionTareas.sinTareas')}</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
           {tareas.map((tarea) => {
-            const { label, icono } = infoTipoTarea(tarea.tipo);
+            const { label, icono } = infoTipoTarea(tarea.tipo, t);
             return (
               <div key={tarea.id} className="card actividad-card">
                 <div>
@@ -92,7 +93,7 @@ export default function GestionTareas() {
                     <strong>{label}</strong>
                     <span className="badge badge-pending">{formatearHora(tarea.horaProgramada)}</span>
                     <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                      {FRECUENCIA_INFO[tarea.frecuencia]}
+                      {frecuenciaLabel(tarea.frecuencia, t)}
                     </span>
                   </div>
                   {tarea.descripcion && <p style={{ margin: '4px 0 0' }}>{tarea.descripcion}</p>}
@@ -103,14 +104,14 @@ export default function GestionTareas() {
                     style={{ width: 'auto' }}
                     onClick={() => navigate(`/bebes/${bebeId}/tareas/${tarea.id}/editar`, { state: { tarea } })}
                   >
-                    Editar
+                    {t('gestionTareas.editar')}
                   </button>
                   <button
                     className="btn btn-danger"
                     disabled={desactivandoId === tarea.id}
                     onClick={() => handleDesactivar(tarea.id)}
                   >
-                    {desactivandoId === tarea.id ? 'Desactivando…' : 'Desactivar'}
+                    {desactivandoId === tarea.id ? t('gestionTareas.desactivando') : t('gestionTareas.desactivar')}
                   </button>
                 </div>
               </div>
@@ -120,7 +121,7 @@ export default function GestionTareas() {
       )}
 
       <Link to={`/bebes/${bebeId}/tareas/nueva`} className="btn btn-primary" style={{ display: 'inline-flex' }}>
-        + Nueva tarea
+        {t('gestionTareas.nuevaTarea')}
       </Link>
     </div>
   );

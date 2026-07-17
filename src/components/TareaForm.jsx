@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { TIPO_TAREA_OPTIONS, FRECUENCIA_OPTIONS } from '../utils/tareas';
+import { tipoTareaOptions, frecuenciaOptions } from '../utils/tareas';
+import { useLanguage } from '../context/LanguageContext';
 
 // valoresIniciales: { tipoTarea, descripcion, frecuencia, horaProgramada } (opcional, para editar)
 export default function TareaForm({ valoresIniciales, onSubmit, textoBoton, error }) {
+  const { t } = useLanguage();
   const [tipoTarea, setTipoTarea] = useState(valoresIniciales?.tipoTarea || 'ALIMENTACION');
   const [descripcion, setDescripcion] = useState(valoresIniciales?.descripcion || '');
   const [frecuencia, setFrecuencia] = useState(valoresIniciales?.frecuencia || 'DIARIA');
@@ -19,7 +21,6 @@ export default function TareaForm({ valoresIniciales, onSubmit, textoBoton, erro
         tipoTarea,
         descripcion: descripcion.trim() || null,
         frecuencia,
-        // el backend espera HH:mm:ss
         horaProgramada: `${horaProgramada}:00`,
       });
     } finally {
@@ -32,36 +33,36 @@ export default function TareaForm({ valoresIniciales, onSubmit, textoBoton, erro
       {error && <div className="error-banner">{error}</div>}
 
       <div className="field">
-        <label htmlFor="tipoTarea">Tipo de tarea</label>
+        <label htmlFor="tipoTarea">{t('tarea.tipo')}</label>
         <select id="tipoTarea" value={tipoTarea} onChange={(e) => setTipoTarea(e.target.value)} required>
-          {TIPO_TAREA_OPTIONS.map((opt) => (
+          {tipoTareaOptions(t).map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
       </div>
 
       <div className="field">
-        <label htmlFor="descripcion">Descripción (opcional)</label>
+        <label htmlFor="descripcion">{t('tarea.descripcion')}</label>
         <input
           id="descripcion"
           type="text"
           value={descripcion}
           onChange={(e) => setDescripcion(e.target.value)}
-          placeholder="Ej: mamadera cada 4 horas"
+          placeholder={t('tarea.descripcionPlaceholder')}
         />
       </div>
 
       <div className="field">
-        <label htmlFor="frecuencia">Frecuencia</label>
+        <label htmlFor="frecuencia">{t('tarea.frecuencia')}</label>
         <select id="frecuencia" value={frecuencia} onChange={(e) => setFrecuencia(e.target.value)} required>
-          {FRECUENCIA_OPTIONS.map((opt) => (
+          {frecuenciaOptions(t).map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
       </div>
 
       <div className="field">
-        <label htmlFor="horaProgramada">Hora programada</label>
+        <label htmlFor="horaProgramada">{t('tarea.horaProgramada')}</label>
         <input
           id="horaProgramada"
           type="time"
@@ -72,7 +73,7 @@ export default function TareaForm({ valoresIniciales, onSubmit, textoBoton, erro
       </div>
 
       <button className="btn btn-primary" type="submit" disabled={enviando}>
-        {enviando ? 'Guardando…' : textoBoton}
+        {enviando ? t('tarea.guardando') : textoBoton}
       </button>
     </form>
   );

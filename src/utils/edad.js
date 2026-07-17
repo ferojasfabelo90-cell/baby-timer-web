@@ -1,15 +1,15 @@
 // Calcula una edad legible ("1 año 2 meses", "3 meses", "12 días")
 // a partir de una fecha de nacimiento en formato ISO (YYYY-MM-DD).
-export function calcularEdad(fechaNacimientoISO) {
-  if (!fechaNacimientoISO) return 'Edad no disponible';
+// Recibe la función `t` (de useLanguage) para devolver el texto en el
+// idioma activo — por eso no es un texto fijo como antes.
+export function calcularEdad(fechaNacimientoISO, t) {
+  if (!fechaNacimientoISO) return t('edad.noDisponible');
 
   const nacimiento = new Date(fechaNacimientoISO + 'T00:00:00');
   const hoy = new Date();
 
-  // Si la fecha vino en un formato que no pudimos interpretar,
-  // mostramos esto en vez de "NaN años NaN meses".
   if (isNaN(nacimiento.getTime())) {
-    return 'Edad no disponible';
+    return t('edad.noDisponible');
   }
 
   let años = hoy.getFullYear() - nacimiento.getFullYear();
@@ -27,13 +27,11 @@ export function calcularEdad(fechaNacimientoISO) {
   }
 
   if (años <= 0 && meses <= 0) {
-    return dias <= 1 ? 'Recién nacido' : `${dias} días`;
+    return dias <= 1 ? t('edad.recienNacido') : t('edad.dias', { n: dias });
   }
-  if (años === 0) {
-    return `${meses} ${meses === 1 ? 'mes' : 'meses'}`;
-  }
-  if (meses === 0) {
-    return `${años} ${años === 1 ? 'año' : 'años'}`;
-  }
-  return `${años} ${años === 1 ? 'año' : 'años'} ${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+
+  const textoAnios = años > 0 ? t(años === 1 ? 'edad.anio' : 'edad.anios', { n: años }) : '';
+  const textoMeses = meses > 0 ? t(meses === 1 ? 'edad.mes' : 'edad.meses', { n: meses }) : '';
+
+  return [textoAnios, textoMeses].filter(Boolean).join(' ');
 }

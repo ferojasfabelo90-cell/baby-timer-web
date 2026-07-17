@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { extractErrorMessage } from '../api/client';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function Login() {
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +24,7 @@ export default function Login() {
     } catch (err) {
       setError(
         err.response?.status === 401
-          ? 'Email o contraseña incorrectos.'
+          ? t('login.errorCredenciales')
           : extractErrorMessage(err)
       );
     } finally {
@@ -31,15 +34,16 @@ export default function Login() {
 
   return (
     <div className="auth-page">
+      <LanguageSwitcher style={{ position: 'absolute', top: 20, right: 20 }} />
       <div className="card" style={{ width: '100%', maxWidth: 380 }}>
-        <h1>Baby Timer</h1>
-        <p>Iniciá sesión para ver las tareas de hoy.</p>
+        <h1>{t('login.titulo')}</h1>
+        <p>{t('login.subtitulo')}</p>
 
         {error && <div className="error-banner">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('login.email')}</label>
             <input
               id="email"
               type="email"
@@ -50,7 +54,7 @@ export default function Login() {
             />
           </div>
           <div className="field">
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">{t('login.password')}</label>
             <input
               id="password"
               type="password"
@@ -61,12 +65,12 @@ export default function Login() {
             />
           </div>
           <button className="btn btn-primary" type="submit" disabled={enviando}>
-            {enviando ? 'Ingresando…' : 'Ingresar'}
+            {enviando ? t('login.ingresando') : t('login.ingresar')}
           </button>
         </form>
 
         <p className="muted-link">
-          ¿No tenés cuenta? <Link to="/registro">Creá una</Link>
+          {t('login.sinCuenta')} <Link to="/registro">{t('login.creaUna')}</Link>
         </p>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { backendMessageTranslations } from '../i18n/backendMessages';
 
 // La URL del backend se define en .env como VITE_API_URL.
 // Ver .env.example para el valor por defecto (http://localhost:8080).
@@ -49,15 +50,31 @@ apiClient.interceptors.response.use(
   }
 );
 
-// Traduce los distintos formatos de error del backend
-// (ApiErrorResponse vs. Map<String,String> de validación) a un string legible.
+// Traduce los distintos formatos de error del backend a un string legible,
+// SIEMPRE en el idioma activo — el backend no se modifica para esto, así
+// que siempre responde en español. Reconocemos el texto exacto que ya
+// sabemos que manda (backendMessageTranslations) y lo traducimos; si no lo
+// reconocemos, NUNCA mostramos el texto crudo — usamos el fallback que
+// cada pantalla ya trae traducido.
 export function extractErrorMessage(error, fallback = 'Ocurrió un error. Intentá de nuevo.') {
   const data = error?.response?.data;
   if (!data) return fallback;
-  if (typeof data.message === 'string') return data.message;
-  if (typeof data === 'object') {
-    const firstFieldError = Object.values(data)[0];
-    if (typeof firstFieldError === 'string') return firstFieldError;
+
+  const idioma = localStorage.getItem('babytimer_language') === 'en' ? 'en' : 'es';
+
+  // Caso 1: respuesta de error "normal" (ApiErrorResponse), con campo `message`.
+  if (typeof data.message === 'string') {
+    const traducido = backendMessageTranslations[data.message.trim()];
+    if (traducido) return traducido[idioma];
+    return fallback; // mensaje no mapeado: nunca mostramos el crudo en español
   }
+
+  // Caso 2: errores de validación de formulario (Map<String,String> del
+  // backend, sin envoltorio). Tampoco mostramos el texto crudo — directo
+  // al fallback traducido de la pantalla.
+  if (typeof data === 'object') {
+    return fallback;
+  }
+
   return fallback;
 }

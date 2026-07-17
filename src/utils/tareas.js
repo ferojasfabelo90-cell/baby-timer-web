@@ -1,30 +1,37 @@
-export const TIPO_TAREA_INFO = {
-  ALIMENTACION: { label: 'Alimentación', icono: '🍼' },
-  MEDICACION: { label: 'Medicación', icono: '💊' },
-  'BAÑO': { label: 'Baño', icono: '🛁' },
-  'SUEÑO': { label: 'Sueño', icono: '😴' },
-  OTRO: { label: 'Otro', icono: '📝' },
+// Solo los íconos son fijos; las etiquetas se piden vía t() para que
+// salgan en el idioma activo. Por eso casi todo acá son funciones que
+// reciben `t` (de useLanguage), no constantes estáticas como antes.
+
+const ICONOS_TIPO_TAREA = {
+  ALIMENTACION: '🍼',
+  MEDICACION: '💊',
+  'BAÑO': '🛁',
+  'SUEÑO': '😴',
+  OTRO: '📝',
 };
 
-export const TIPO_TAREA_OPTIONS = Object.entries(TIPO_TAREA_INFO).map(([value, info]) => ({
-  value,
-  label: `${info.icono} ${info.label}`,
-}));
+export function infoTipoTarea(tipo, t) {
+  return {
+    label: t(`tipoTarea.${tipo}`),
+    icono: ICONOS_TIPO_TAREA[tipo] || '📌',
+  };
+}
 
-export const FRECUENCIA_INFO = {
-  UNICA: 'Única vez',
-  DIARIA: 'Diaria',
-  SEMANAL: 'Semanal',
-  MENSUAL: 'Mensual',
-};
+export function tipoTareaOptions(t) {
+  return Object.keys(ICONOS_TIPO_TAREA).map((value) => ({
+    value,
+    label: `${ICONOS_TIPO_TAREA[value]} ${t(`tipoTarea.${value}`)}`,
+  }));
+}
 
-export const FRECUENCIA_OPTIONS = Object.entries(FRECUENCIA_INFO).map(([value, label]) => ({
-  value,
-  label,
-}));
+const FRECUENCIAS = ['UNICA', 'DIARIA', 'SEMANAL', 'MENSUAL'];
 
-export function infoTipoTarea(tipo) {
-  return TIPO_TAREA_INFO[tipo] || { label: tipo, icono: '📌' };
+export function frecuenciaLabel(frecuencia, t) {
+  return t(`frecuencia.${frecuencia}`);
+}
+
+export function frecuenciaOptions(t) {
+  return FRECUENCIAS.map((value) => ({ value, label: t(`frecuencia.${value}`) }));
 }
 
 // "08:00:00" -> "08:00"

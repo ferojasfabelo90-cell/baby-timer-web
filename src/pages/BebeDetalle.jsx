@@ -5,14 +5,16 @@ import { obtenerActividadesDeHoy, marcarTareaRealizada } from '../api/tareas';
 import { calcularEdad } from '../utils/edad';
 import { infoTipoTarea, formatearHora } from '../utils/tareas';
 import { extractErrorMessage } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function BebeDetalle() {
   const { bebeId } = useParams();
+  const { t } = useLanguage();
 
   const [bebe, setBebe] = useState(null);
-  const [actividades, setActividades] = useState(null); // null = cargando
+  const [actividades, setActividades] = useState(null);
   const [error, setError] = useState('');
-  const [enviandoId, setEnviandoId] = useState(null); // tareaId que se está marcando
+  const [enviandoId, setEnviandoId] = useState(null);
 
   const cargarActividades = useCallback(() => {
     return obtenerActividadesDeHoy(Number(bebeId)).then(setActividades);
@@ -22,7 +24,8 @@ export default function BebeDetalle() {
     setError('');
     Promise.all([obtenerBebe(bebeId), cargarActividades()])
       .then(([bebeData]) => setBebe(bebeData))
-      .catch((err) => setError(extractErrorMessage(err, 'No pudimos cargar este bebé.')));
+      .catch((err) => setError(extractErrorMessage(err, t('dashboard.errorCarga'))));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bebeId, cargarActividades]);
 
   async function handleMarcarRealizada(tareaId) {
@@ -32,7 +35,7 @@ export default function BebeDetalle() {
       await marcarTareaRealizada(tareaId);
       await cargarActividades();
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos marcar la tarea como realizada.'));
+      setError(extractErrorMessage(err, t('dashboard.errorMarcar')));
     } finally {
       setEnviandoId(null);
     }
@@ -43,14 +46,14 @@ export default function BebeDetalle() {
       <div className="page">
         <div className="error-banner">{error}</div>
         <Link to="/bebes" className="muted-link" style={{ display: 'block' }}>
-          Volver a mis bebés
+          {t('dashboard.misBebes')}
         </Link>
       </div>
     );
   }
 
   if (!bebe || actividades === null) {
-    return <div className="page">Cargando…</div>;
+    return <div className="page">{t('dashboard.cargando')}</div>;
   }
 
   const pendientes = [...actividades]
@@ -63,18 +66,24 @@ export default function BebeDetalle() {
   return (
     <div className="page">
       <Link to="/bebes" className="muted-link" style={{ display: 'block', marginBottom: 'var(--space-4)' }}>
-        ← Mis bebés
+        {t('dashboard.misBebes')}
       </Link>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-5)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
         <div>
           <h2 style={{ marginBottom: 2 }}>👶 {bebe.nombre}</h2>
-          <p style={{ margin: 0 }}>{calcularEdad(bebe.fechaNacimiento)}</p>
+          <p style={{ margin: 0 }}>{calcularEdad(bebe.fechaNacimiento, t)}</p>
         </div>
         <span className={`badge ${bebe.rol === 'ADMIN' ? 'badge-admin' : 'badge-cuidador'}`}>
-          {bebe.rol === 'ADMIN' ? 'Administrador' : 'Cuidador'}
+          {bebe.rol === 'ADMIN' ? t('dashboard.administrador') : t('dashboard.cuidador')}
         </span>
       </div>
+
+      {bebe.rol === 'CUIDADOR' && (
+        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-4)' }}>
+          {t('dashboard.aclaracionCuidador', { nombre: bebe.nombre })}
+        </p>
+      )}
 
       {bebe.rol === 'ADMIN' && (
         <Link
@@ -82,7 +91,7 @@ export default function BebeDetalle() {
           className="btn btn-secondary"
           style={{ display: 'inline-flex', marginBottom: 'var(--space-3)' }}
         >
-          ⚙️ Gestionar tareas
+          {t('dashboard.gestionarTareas')}
         </Link>
       )}
       {bebe.rol === 'ADMIN' && (
@@ -91,7 +100,7 @@ export default function BebeDetalle() {
           className="btn btn-secondary"
           style={{ display: 'inline-flex', marginBottom: 'var(--space-3)' }}
         >
-          👥 Invitar cuidador
+          {t('dashboard.invitarCuidador')}
         </Link>
       )}
       <Link
@@ -99,18 +108,18 @@ export default function BebeDetalle() {
         className="btn btn-secondary"
         style={{ display: 'inline-flex', marginBottom: 'var(--space-5)' }}
       >
-        📋 Ver bitácora
+        {t('dashboard.verBitacora')}
       </Link>
 
       {error && <div className="error-banner">{error}</div>}
 
-      <h3>Hoy — pendientes</h3>
+      <h3>{t('dashboard.hoyPendientes')}</h3>
       {pendientes.length === 0 ? (
-        <p>No quedan actividades pendientes por hoy. 🎉</p>
+        <p>{t('dashboard.sinPendientes')}</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-6)' }}>
           {pendientes.map((actividad) => {
-            const { label, icono } = infoTipoTarea(actividad.tipo);
+            const { label, icono } = infoTipoTarea(actividad.tipo, t);
             const enviando = enviandoId === actividad.tareaId;
             return (
               <div key={actividad.tareaId} className="card actividad-card">
@@ -130,7 +139,7 @@ export default function BebeDetalle() {
                   disabled={enviando}
                   onClick={() => handleMarcarRealizada(actividad.tareaId)}
                 >
-                  {enviando ? 'Marcando…' : 'Marcar hecha'}
+                  {enviando ? t('dashboard.marcando') : t('dashboard.marcarHecha')}
                 </button>
               </div>
             );
@@ -138,13 +147,13 @@ export default function BebeDetalle() {
         </div>
       )}
 
-      <h3>Hoy — completadas</h3>
+      <h3>{t('dashboard.hoyCompletadas')}</h3>
       {completadas.length === 0 ? (
-        <p>Todavía no marcaste ninguna actividad como hecha.</p>
+        <p>{t('dashboard.sinCompletadas')}</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
           {completadas.map((actividad) => {
-            const { label, icono } = infoTipoTarea(actividad.tipo);
+            const { label, icono } = infoTipoTarea(actividad.tipo, t);
             return (
               <div key={actividad.tareaId} className="card actividad-card actividad-completada">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>

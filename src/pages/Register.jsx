@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { extractErrorMessage } from '../api/client';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function Register() {
   const { register } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
@@ -20,7 +23,7 @@ export default function Register() {
       await register({ nombre, email, password });
       navigate('/bebes');
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos crear la cuenta. Revisá los datos.'));
+      setError(extractErrorMessage(err, t('register.errorGenerico')));
     } finally {
       setEnviando(false);
     }
@@ -28,15 +31,16 @@ export default function Register() {
 
   return (
     <div className="auth-page">
+      <LanguageSwitcher style={{ position: 'absolute', top: 20, right: 20 }} />
       <div className="card" style={{ width: '100%', maxWidth: 380 }}>
-        <h1>Creá tu cuenta</h1>
-        <p>Para empezar a registrar el cuidado de tu bebé.</p>
+        <h1>{t('register.titulo')}</h1>
+        <p>{t('register.subtitulo')}</p>
 
         {error && <div className="error-banner">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <label htmlFor="nombre">Nombre</label>
+            <label htmlFor="nombre">{t('register.nombre')}</label>
             <input
               id="nombre"
               type="text"
@@ -47,7 +51,7 @@ export default function Register() {
             />
           </div>
           <div className="field">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('register.email')}</label>
             <input
               id="email"
               type="email"
@@ -58,7 +62,7 @@ export default function Register() {
             />
           </div>
           <div className="field">
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">{t('register.password')}</label>
             <input
               id="password"
               type="password"
@@ -70,12 +74,12 @@ export default function Register() {
             />
           </div>
           <button className="btn btn-primary" type="submit" disabled={enviando}>
-            {enviando ? 'Creando cuenta…' : 'Crear cuenta'}
+            {enviando ? t('register.creando') : t('register.crear')}
           </button>
         </form>
 
         <p className="muted-link">
-          ¿Ya tenés cuenta? <Link to="/login">Ingresá</Link>
+          {t('register.yaTeneCuenta')} <Link to="/login">{t('register.ingresa')}</Link>
         </p>
       </div>
     </div>

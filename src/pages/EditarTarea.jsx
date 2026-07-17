@@ -3,14 +3,14 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { listarTareas, editarTarea } from '../api/tareas';
 import TareaForm from '../components/TareaForm';
 import { extractErrorMessage } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function EditarTarea() {
   const { bebeId, tareaId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
 
-  // Si venimos del listado, la tarea ya viaja en el state de navegación
-  // y nos ahorramos una llamada. Si no (ej: se recargó la página), la buscamos.
   const [tarea, setTarea] = useState(location.state?.tarea || null);
   const [error, setError] = useState('');
 
@@ -18,14 +18,15 @@ export default function EditarTarea() {
     if (tarea) return;
     listarTareas(Number(bebeId))
       .then((tareas) => {
-        const encontrada = tareas.find((t) => t.id === Number(tareaId));
+        const encontrada = tareas.find((tItem) => tItem.id === Number(tareaId));
         if (!encontrada) {
-          setError('No encontramos esa tarea. Puede que ya haya sido desactivada.');
+          setError(t('tarea.noEncontrada'));
           return;
         }
         setTarea(encontrada);
       })
-      .catch((err) => setError(extractErrorMessage(err, 'No pudimos cargar la tarea.')));
+      .catch((err) => setError(extractErrorMessage(err, t('tarea.errorCarga'))));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bebeId, tareaId, tarea]);
 
   async function handleSubmit(payload) {
@@ -34,16 +35,16 @@ export default function EditarTarea() {
       await editarTarea(Number(tareaId), payload);
       navigate(`/bebes/${bebeId}/tareas`);
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos guardar los cambios. Revisá los datos.'));
+      setError(extractErrorMessage(err, t('tarea.errorGuardar')));
     }
   }
 
   return (
     <div className="page">
       <Link to={`/bebes/${bebeId}/tareas`} className="muted-link" style={{ display: 'block', marginBottom: 'var(--space-4)' }}>
-        ← Tareas
+        {t('tarea.volverTareas')}
       </Link>
-      <h2>Editar tarea</h2>
+      <h2>{t('tarea.editarTitulo')}</h2>
 
       {error && !tarea && <div className="error-banner">{error}</div>}
 
@@ -56,11 +57,11 @@ export default function EditarTarea() {
             horaProgramada: tarea.horaProgramada,
           }}
           onSubmit={handleSubmit}
-          textoBoton="Guardar cambios"
+          textoBoton={t('tarea.guardarCambios')}
           error={error}
         />
       ) : (
-        !error && <p>Cargando…</p>
+        !error && <p>{t('tarea.cargando')}</p>
       )}
     </div>
   );

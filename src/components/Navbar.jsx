@@ -1,8 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
   const { usuario, logout } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   if (!usuario) return null;
@@ -19,7 +22,8 @@ export default function Navbar() {
         <span className="navbar-user">
           {usuario.nombre}
         </span>
-        <button className="btn btn-ghost" onClick={handleLogout}>Salir</button>
+        <LanguageSwitcher />
+        <button className="btn btn-ghost" onClick={handleLogout}>{t('nav.salir')}</button>
       </div>
     </header>
   );

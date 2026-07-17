@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { listarBebes, listarInvitacionesPendientes, aceptarInvitacion, rechazarInvitacion } from '../api/bebes';
 import { calcularEdad } from '../utils/edad';
 import { extractErrorMessage } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Bebes() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [bebes, setBebes] = useState(null); // null = cargando
   const [invitaciones, setInvitaciones] = useState([]);
   const [error, setError] = useState('');
@@ -22,8 +24,9 @@ export default function Bebes() {
 
   useEffect(() => {
     cargarTodo().catch((err) =>
-      setError(extractErrorMessage(err, 'No pudimos cargar tus bebés.'))
+      setError(extractErrorMessage(err, t('bebes.errorCarga')))
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleAceptar(invitacionId) {
@@ -31,9 +34,9 @@ export default function Bebes() {
     setError('');
     try {
       await aceptarInvitacion(invitacionId);
-      await cargarTodo(); // el bebé aceptado ahora tiene que aparecer en "Mis bebés"
+      await cargarTodo();
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos aceptar la invitación.'));
+      setError(extractErrorMessage(err, t('bebes.errorAceptar')));
     } finally {
       setProcesandoId(null);
     }
@@ -46,7 +49,7 @@ export default function Bebes() {
       await rechazarInvitacion(invitacionId);
       setInvitaciones((actuales) => actuales.filter((inv) => inv.id !== invitacionId));
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos rechazar la invitación.'));
+      setError(extractErrorMessage(err, t('bebes.errorRechazar')));
     } finally {
       setProcesandoId(null);
     }
@@ -61,18 +64,18 @@ export default function Bebes() {
   }
 
   if (bebes === null) {
-    return <div className="page">Cargando…</div>;
+    return <div className="page">{t('bebes.cargando')}</div>;
   }
 
   const seccionInvitaciones = invitaciones.length > 0 && (
     <div style={{ marginBottom: 'var(--space-6)' }}>
-      <h3>Invitaciones pendientes</h3>
+      <h3>{t('bebes.invitacionesPendientes')}</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
         {invitaciones.map((inv) => (
           <div key={inv.id} className="card evento-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
             <div>
               <strong>👶 {inv.bebeNombre}</strong>
-              <p style={{ margin: '4px 0 0' }}>Te invitaron a ser cuidador de este bebé.</p>
+              <p style={{ margin: '4px 0 0' }}>{t('bebes.invitacionTexto')}</p>
             </div>
             <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
               <button
@@ -81,14 +84,14 @@ export default function Bebes() {
                 disabled={procesandoId === inv.id}
                 onClick={() => handleAceptar(inv.id)}
               >
-                Aceptar
+                {t('bebes.aceptar')}
               </button>
               <button
                 className="btn btn-danger"
                 disabled={procesandoId === inv.id}
                 onClick={() => handleRechazar(inv.id)}
               >
-                Rechazar
+                {t('bebes.rechazar')}
               </button>
             </div>
           </div>
@@ -97,17 +100,16 @@ export default function Bebes() {
     </div>
   );
 
-  // Estado vacío: sin bebés propios (puede o no tener invitaciones pendientes arriba).
   if (bebes.length === 0) {
     return (
       <div className="page">
         {seccionInvitaciones}
         {error && <div className="error-banner">{error}</div>}
         <div className="card" style={{ textAlign: 'center' }}>
-          <h2>Bienvenido 👋</h2>
-          <p>Aún no tenés bebés registrados.</p>
+          <h2>{t('bebes.bienvenido')}</h2>
+          <p>{t('bebes.sinBebes')}</p>
           <button className="btn btn-primary" onClick={() => navigate('/bebes/nuevo')}>
-            Crear mi primer bebé
+            {t('bebes.crearPrimero')}
           </button>
         </div>
       </div>
@@ -119,7 +121,7 @@ export default function Bebes() {
       {seccionInvitaciones}
       {error && <div className="error-banner">{error}</div>}
 
-      <h2>Mis bebés</h2>
+      <h2>{t('bebes.misBebes')}</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
         {bebes.map((bebe) => (
           <button
@@ -129,17 +131,17 @@ export default function Bebes() {
           >
             <div>
               <h3 style={{ margin: 0 }}>👶 {bebe.nombre}</h3>
-              <p style={{ margin: '4px 0 0' }}>{calcularEdad(bebe.fechaNacimiento)}</p>
+              <p style={{ margin: '4px 0 0' }}>{calcularEdad(bebe.fechaNacimiento, t)}</p>
             </div>
             <span className={`badge ${bebe.rol === 'ADMIN' ? 'badge-admin' : 'badge-cuidador'}`}>
-              {bebe.rol === 'ADMIN' ? 'Admin' : 'Cuidador'}
+              {bebe.rol === 'ADMIN' ? t('bebes.admin') : t('bebes.cuidador')}
             </span>
           </button>
         ))}
       </div>
 
       <Link to="/bebes/nuevo" className="btn btn-secondary" style={{ marginTop: 'var(--space-5)' }}>
-        + Nuevo bebé
+        {t('bebes.nuevoBebe')}
       </Link>
     </div>
   );

@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { crearBebe } from '../api/bebes';
 import { extractErrorMessage } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function NuevoBebe() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [nombre, setNombre] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [error, setError] = useState('');
@@ -18,7 +20,7 @@ export default function NuevoBebe() {
       const bebe = await crearBebe({ nombre, fechaNacimiento });
       navigate(`/bebes/${bebe.id}`);
     } catch (err) {
-      setError(extractErrorMessage(err, 'No pudimos guardar el bebé. Revisá los datos.'));
+      setError(extractErrorMessage(err, t('nuevoBebe.errorGenerico')));
     } finally {
       setGuardando(false);
     }
@@ -26,13 +28,13 @@ export default function NuevoBebe() {
 
   return (
     <div className="page">
-      <h2>Nuevo bebé</h2>
+      <h2>{t('nuevoBebe.titulo')}</h2>
 
       {error && <div className="error-banner">{error}</div>}
 
       <form className="card" onSubmit={handleSubmit}>
         <div className="field">
-          <label htmlFor="nombre">Nombre</label>
+          <label htmlFor="nombre">{t('nuevoBebe.nombre')}</label>
           <input
             id="nombre"
             type="text"
@@ -43,7 +45,7 @@ export default function NuevoBebe() {
           />
         </div>
         <div className="field">
-          <label htmlFor="fechaNacimiento">Fecha de nacimiento</label>
+          <label htmlFor="fechaNacimiento">{t('nuevoBebe.fechaNacimiento')}</label>
           <input
             id="fechaNacimiento"
             type="date"
@@ -54,12 +56,12 @@ export default function NuevoBebe() {
           />
         </div>
         <button className="btn btn-primary" type="submit" disabled={guardando}>
-          {guardando ? 'Guardando…' : 'Guardar'}
+          {guardando ? t('nuevoBebe.guardando') : t('nuevoBebe.guardar')}
         </button>
       </form>
 
       <Link to="/bebes" className="muted-link" style={{ display: 'block' }}>
-        Cancelar
+        {t('nuevoBebe.cancelar')}
       </Link>
     </div>
   );
