@@ -29,7 +29,7 @@ export default function Register() {
     setEnviando(true);
     try {
       await register({ nombre, email, password });
-      navigate('/bebes');
+      navigate('/bienvenida');
     } catch (err) {
       setError(extractErrorMessage(err, t('register.errorGenerico')));
     } finally {

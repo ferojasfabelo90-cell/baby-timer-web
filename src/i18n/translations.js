@@ -154,6 +154,15 @@ export const translations = {
     'validacion.campoRequerido': 'Completá este campo.',
     'validacion.passwordCorta': 'La contraseña tiene que tener al menos 6 caracteres.',
 
+    // Bienvenida (post-registro, solo orienta, no fija ningún rol)
+    'bienvenida.titulo': '¡Cuenta creada! 👋',
+    'bienvenida.subtitulo': '¿Qué vas a hacer en Baby Timer?',
+    'bienvenida.opcionPropio': 'Voy a coordinar el cuidado de mi bebé',
+    'bienvenida.opcionInvitado': 'Me invitaron a cuidar el bebé de alguien más',
+    'bienvenida.tituloInvitado': '¡Perfecto!',
+    'bienvenida.explicacionInvitado': 'Compartí este email con quien te va a invitar — lo va a necesitar exacto para agregarte:',
+    'bienvenida.continuar': 'Entendido, continuar',
+
     // Edad
     'edad.noDisponible': 'Edad no disponible',
     'edad.recienNacido': 'Recién nacido',
@@ -333,6 +342,15 @@ export const translations = {
     // in the browser/OS language instead of the app's language).
     'validacion.campoRequerido': 'Please fill in this field.',
     'validacion.passwordCorta': 'Password must be at least 6 characters long.',
+
+    // Welcome (post-registration, just routes, doesn't set any role)
+    'bienvenida.titulo': 'Account created! 👋',
+    'bienvenida.subtitulo': 'What are you going to do in Baby Timer?',
+    'bienvenida.opcionPropio': "I'm going to coordinate my baby's care",
+    'bienvenida.opcionInvitado': "I was invited to help care for someone else's baby",
+    'bienvenida.tituloInvitado': 'Perfect!',
+    'bienvenida.explicacionInvitado': "Share this email with whoever is going to invite you — they'll need it exactly to add you:",
+    'bienvenida.continuar': 'Got it, continue',
 
     // Age
     'edad.noDisponible': 'Age not available',

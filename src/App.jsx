@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Bebes from './pages/Bebes';
+import Bienvenida from './pages/Bienvenida';
 import NuevoBebe from './pages/NuevoBebe';
 import BebeDetalle from './pages/BebeDetalle';
 import GestionTareas from './pages/GestionTareas';
@@ -23,6 +24,14 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Register />} />
+            <Route
+              path="/bienvenida"
+              element={
+                <ProtectedRoute>
+                  <Bienvenida />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/bebes"
               element={
