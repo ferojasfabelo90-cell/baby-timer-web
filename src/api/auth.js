@@ -14,3 +14,11 @@ export async function getUsuarioActual() {
   const { data } = await apiClient.get('/api/v1/usuarios/me');
   return data;
 }
+
+export async function solicitarRecuperacion(email) {
+  await apiClient.post('/api/v1/auth/forgot-password', { email });
+}
+
+export async function restablecerPassword(token, nuevaPassword) {
+  await apiClient.post('/api/v1/auth/reset-password', { token, nuevaPassword });
+}

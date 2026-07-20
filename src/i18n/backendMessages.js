@@ -53,4 +53,14 @@ export const backendMessageTranslations = {
     es: 'Email o contraseña incorrectos.',
     en: 'Incorrect email or password.',
   },
+
+  // Recuperación de contraseña
+  'El link no es válido o ya fue usado': {
+    es: 'Este link no es válido o ya fue usado.',
+    en: 'This link is invalid or was already used.',
+  },
+  'El link venció, pedí uno nuevo': {
+    es: 'Este link venció — pedí uno nuevo.',
+    en: 'This link expired — request a new one.',
+  },
 };

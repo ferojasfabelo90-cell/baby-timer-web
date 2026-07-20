@@ -74,6 +74,10 @@ export default function Login() {
         </form>
 
         <p className="muted-link">
+          <Link to="/olvide-password">{t('login.olvidePassword')}</Link>
+        </p>
+
+        <p className="muted-link">
           {t('login.sinCuenta')} <Link to="/registro">{t('login.creaUna')}</Link>
         </p>
       </div>

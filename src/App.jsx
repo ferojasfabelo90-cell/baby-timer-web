@@ -4,6 +4,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import OlvidePassword from './pages/OlvidePassword';
+import RestablecerPassword from './pages/RestablecerPassword';
 import Bebes from './pages/Bebes';
 import Bienvenida from './pages/Bienvenida';
 import NuevoBebe from './pages/NuevoBebe';
@@ -24,6 +26,8 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Register />} />
+            <Route path="/olvide-password" element={<OlvidePassword />} />
+            <Route path="/restablecer" element={<RestablecerPassword />} />
             <Route
               path="/bienvenida"
               element={

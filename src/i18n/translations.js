@@ -18,6 +18,7 @@ export const translations = {
     'login.sinCuenta': '¿No tenés cuenta?',
     'login.creaUna': 'Creá una',
     'login.errorCredenciales': 'Email o contraseña incorrectos.',
+    'login.olvidePassword': '¿Olvidaste tu contraseña?',
 
     // Register
     'register.titulo': 'Creá tu cuenta',
@@ -163,6 +164,31 @@ export const translations = {
     'bienvenida.explicacionInvitado': 'Compartí este email con quien te va a invitar — lo va a necesitar exacto para agregarte:',
     'bienvenida.continuar': 'Entendido, continuar',
 
+    // Olvidé mi contraseña
+    'olvidePassword.titulo': 'Recuperar contraseña',
+    'olvidePassword.subtitulo': 'Ingresá tu email y te mandamos un link para elegir una contraseña nueva.',
+    'olvidePassword.email': 'Email',
+    'olvidePassword.enviar': 'Enviar link',
+    'olvidePassword.enviando': 'Enviando…',
+    'olvidePassword.exito': 'Si ese email tiene una cuenta en Baby Timer, te mandamos un link para restablecer tu contraseña. Revisá tu bandeja de entrada (y spam, por las dudas).',
+    'olvidePassword.volverLogin': '← Volver al login',
+
+    // Restablecer contraseña
+    'restablecer.titulo': 'Elegí una contraseña nueva',
+    'restablecer.subtitulo': 'Tiene que tener al menos 6 caracteres.',
+    'restablecer.passwordNueva': 'Contraseña nueva',
+    'restablecer.confirmarPassword': 'Confirmá la contraseña',
+    'restablecer.guardar': 'Guardar contraseña',
+    'restablecer.guardando': 'Guardando…',
+    'restablecer.passwordsNoCoinciden': 'Las contraseñas no coinciden.',
+    'restablecer.errorGenerico': 'No pudimos restablecer tu contraseña. Probá pedir un link nuevo.',
+    'restablecer.linkInvalido': 'Link incompleto',
+    'restablecer.linkInvalidoTexto': 'Este link no tiene la información necesaria para restablecer tu contraseña. Pedí uno nuevo.',
+    'restablecer.pedirNuevo': 'Pedir un link nuevo',
+    'restablecer.exitoTitulo': '¡Listo! 🎉',
+    'restablecer.exitoTexto': 'Tu contraseña se actualizó correctamente. Ya podés iniciar sesión con la nueva.',
+    'restablecer.irALogin': 'Ir al login',
+
     // Edad
     'edad.noDisponible': 'Edad no disponible',
     'edad.recienNacido': 'Recién nacido',
@@ -207,6 +233,7 @@ export const translations = {
     'login.sinCuenta': "Don't have an account?",
     'login.creaUna': 'Create one',
     'login.errorCredenciales': 'Incorrect email or password.',
+    'login.olvidePassword': 'Forgot your password?',
 
     // Register
     'register.titulo': 'Create your account',
@@ -351,6 +378,31 @@ export const translations = {
     'bienvenida.tituloInvitado': 'Perfect!',
     'bienvenida.explicacionInvitado': "Share this email with whoever is going to invite you — they'll need it exactly to add you:",
     'bienvenida.continuar': 'Got it, continue',
+
+    // Forgot password
+    'olvidePassword.titulo': 'Recover password',
+    'olvidePassword.subtitulo': "Enter your email and we'll send you a link to choose a new password.",
+    'olvidePassword.email': 'Email',
+    'olvidePassword.enviar': 'Send link',
+    'olvidePassword.enviando': 'Sending…',
+    'olvidePassword.exito': "If that email has a Baby Timer account, we sent a link to reset your password. Check your inbox (and spam, just in case).",
+    'olvidePassword.volverLogin': '← Back to login',
+
+    // Reset password
+    'restablecer.titulo': 'Choose a new password',
+    'restablecer.subtitulo': 'Must be at least 6 characters long.',
+    'restablecer.passwordNueva': 'New password',
+    'restablecer.confirmarPassword': 'Confirm password',
+    'restablecer.guardar': 'Save password',
+    'restablecer.guardando': 'Saving…',
+    'restablecer.passwordsNoCoinciden': "Passwords don't match.",
+    'restablecer.errorGenerico': "We couldn't reset your password. Try requesting a new link.",
+    'restablecer.linkInvalido': 'Incomplete link',
+    'restablecer.linkInvalidoTexto': "This link doesn't have what's needed to reset your password. Request a new one.",
+    'restablecer.pedirNuevo': 'Request a new link',
+    'restablecer.exitoTitulo': 'All set! 🎉',
+    'restablecer.exitoTexto': 'Your password was updated successfully. You can log in with it now.',
+    'restablecer.irALogin': 'Go to login',
 
     // Age
     'edad.noDisponible': 'Age not available',
