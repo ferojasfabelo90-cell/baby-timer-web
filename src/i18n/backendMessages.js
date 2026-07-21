@@ -63,4 +63,22 @@ export const backendMessageTranslations = {
     es: 'Este link venció — pedí uno nuevo.',
     en: 'This link expired — request a new one.',
   },
+
+  // Programación de tareas
+  'Elegí al menos un día de la semana para una tarea semanal': {
+    es: 'Elegí al menos un día de la semana.',
+    en: 'Pick at least one day of the week.',
+  },
+  'Elegí al menos un día del mes para una tarea mensual': {
+    es: 'Elegí al menos un día del mes.',
+    en: 'Pick at least one day of the month.',
+  },
+  'Elegí la fecha en la que va a ocurrir esta tarea': {
+    es: 'Elegí la fecha en la que va a ocurrir.',
+    en: 'Pick the date this is going to happen.',
+  },
+  'La fecha no puede ser en el pasado': {
+    es: 'La fecha no puede ser en el pasado.',
+    en: "The date can't be in the past.",
+  },
 };

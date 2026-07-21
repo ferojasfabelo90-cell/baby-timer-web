@@ -218,6 +218,46 @@ a:focus-visible {
   padding: var(--space-4);
 }
 
+/* ---------- Selector de días (formulario de tarea) ---------- */
+.dias-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.dias-grid-mes {
+  gap: 6px;
+}
+
+.dia-chip {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  min-width: 44px;
+}
+
+.dias-grid-mes .dia-chip {
+  padding: 6px 0;
+  min-width: 36px;
+  text-align: center;
+}
+
+.dia-chip:hover {
+  border-color: var(--color-brand);
+}
+
+.dia-chip-activo {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: white;
+  font-weight: 600;
+}
+
 /* ---------- Selector de idioma ---------- */
 .language-switcher {
   display: flex;

@@ -55,6 +55,8 @@ export default function EditarTarea() {
             descripcion: tarea.descripcion,
             frecuencia: tarea.frecuencia,
             horaProgramada: tarea.horaProgramada,
+            diasProgramados: tarea.diasProgramados,
+            fechaProgramada: tarea.fechaProgramada,
           }}
           onSubmit={handleSubmit}
           textoBoton={t('tarea.guardarCambios')}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { obtenerBebe } from '../api/bebes';
 import { listarTareas, desactivarTarea } from '../api/tareas';
-import { infoTipoTarea, formatearHora, frecuenciaLabel } from '../utils/tareas';
+import { infoTipoTarea, formatearHora, frecuenciaLabel, resumenProgramacion } from '../utils/tareas';
 import { extractErrorMessage } from '../api/client';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -85,15 +85,17 @@ export default function GestionTareas() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-5)' }}>
           {tareas.map((tarea) => {
             const { label, icono } = infoTipoTarea(tarea.tipo, t);
+            const resumen = resumenProgramacion(tarea, t);
             return (
               <div key={tarea.id} className="card actividad-card">
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '1.2rem' }}>{icono}</span>
                     <strong>{label}</strong>
                     <span className="badge badge-pending">{formatearHora(tarea.horaProgramada)}</span>
                     <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                       {frecuenciaLabel(tarea.frecuencia, t)}
+                      {resumen && ` · ${resumen}`}
                     </span>
                   </div>
                   {tarea.descripcion && <p style={{ margin: '4px 0 0' }}>{tarea.descripcion}</p>}
